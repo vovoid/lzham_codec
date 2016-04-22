@@ -3,7 +3,7 @@
 #pragma once
 
 // TODO
-#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) \
+//#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) \
     || defined(linux) || defined(__linux) || defined(__linux__)
 
    #undef UINT8_MIN
@@ -23,7 +23,7 @@
    #undef INT64_MIN
    #undef INT64_MAX
 
-#endif
+//#endif
 
 namespace lzham
 {
@@ -44,9 +44,9 @@ namespace lzham
       typedef long long             int64;
    #endif
 
-   const uint8  UINT8_MIN  = 0;
+   const uint8  UINT8_MIN = 0 ;
    const uint8  UINT8_MAX  = 0xFFU;
-   const uint16 UINT16_MIN = 0;
+   const uint16 UINT16_MIN = 0x0;
    const uint16 UINT16_MAX = 0xFFFFU;
    const uint32 UINT32_MIN = 0;
    const uint32 UINT32_MAX = 0xFFFFFFFFU;
