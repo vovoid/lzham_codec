@@ -4,7 +4,7 @@
 
 // TODO
 //#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) \
-    || defined(linux) || defined(__linux) || defined(__linux__)
+//    || defined(linux) || defined(__linux) || defined(__linux__)
 
    #undef UINT8_MIN
    #undef UINT8_MAX
