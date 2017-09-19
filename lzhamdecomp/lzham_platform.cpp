@@ -62,7 +62,11 @@ void lzham_debug_break(void)
 #if LZHAM_USE_WIN32_API
    DebugBreak();
 #elif (TARGET_OS_MAC == 1) && (TARGET_IPHONE_SIMULATOR == 0) && (TARGET_OS_IPHONE == 0)
-   __asm {int 3}
+  #if (!defined(__clang__))
+    __asm {int 3}
+  #else
+    __asm__("int $3");
+  #endif
 #else
    assert(0);
 #endif
@@ -90,7 +94,7 @@ namespace lzham
 
    static lzham::vector<buffered_str> g_buffered_strings;
    static volatile long g_buffered_string_locked;
-   
+
    static void lock_buffered_strings()
    {
       while (atomic_exchange32(&g_buffered_string_locked, 1) == 1)
@@ -103,7 +107,7 @@ namespace lzham
 
       LZHAM_MEMORY_IMPORT_BARRIER
    }
-   
+
    static void unlock_buffered_strings()
    {
       LZHAM_MEMORY_EXPORT_BARRIER
@@ -116,18 +120,18 @@ namespace lzham
 void lzham_buffered_printf(const char *format, ...)
 {
    format;
-   
+
    char buf[lzham::buffered_str::cBufSize];
-   
+
    va_list args;
    va_start(args, format);
    vsnprintf_s(buf, sizeof(buf), sizeof(buf), format, args);
-   va_end(args);   
+   va_end(args);
 
    buf[sizeof(buf) - 1] = '\0';
-   
+
    lzham::lock_buffered_strings();
-   
+
    if (!lzham::g_buffered_strings.capacity())
    {
       lzham::g_buffered_strings.try_reserve(2048);
@@ -154,4 +158,4 @@ void lzham_flush_buffered_printf()
 
    lzham::unlock_buffered_strings();
 }
-#endif   
+#endif
